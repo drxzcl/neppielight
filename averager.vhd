@@ -62,7 +62,7 @@ architecture Behavioral of averager is
    type accumulator_type is array (0 to 9,0 to 3) of std_logic_vector(21 downto 0);
    signal accumulator : accumulator_type; 
    signal address : unsigned(13 downto 0);
-
+	signal blocknr : integer;
 
 begin
    address <= unsigned(not y(6 downto 0))&unsigned(x(6 downto 0));
@@ -70,13 +70,15 @@ begin
 process(clk_pixel)
    begin
       if rising_edge(clk_pixel) then
-         if a_blank = '0' and x(10 downto 7) = "0000" and y(10 downto 7) = "0000" then
-				accumulator(0,0) <= std_logic_vector(unsigned(accumulator(0,0)) + unsigned(a_red));
-				accumulator(0,1) <= std_logic_vector(unsigned(accumulator(0,1)) + unsigned(a_green));
-				accumulator(0,2) <= std_logic_vector(unsigned(accumulator(0,2)) + unsigned(a_blue));
-            o_red     <= accumulator(0,0)(21 downto 14);
-            o_green   <= accumulator(0,1)(21 downto 14);
-            o_blue    <= accumulator(0,2)(21 downto 14);
+         if a_blank = '0' and y(10 downto 7) = "0000" then
+			   -- and x(10 downto 7) = "0000"
+				blocknr <= to_integer(unsigned(x(10 downto 7)));
+				accumulator(blocknr,0) <= std_logic_vector(unsigned(accumulator(blocknr,0)) + unsigned(a_red));
+				accumulator(blocknr,1) <= std_logic_vector(unsigned(accumulator(blocknr,1)) + unsigned(a_green));
+				accumulator(blocknr,2) <= std_logic_vector(unsigned(accumulator(blocknr,2)) + unsigned(a_blue));
+            o_red     <= accumulator(blocknr,0)(21 downto 14);
+            o_green   <= accumulator(blocknr,1)(21 downto 14);
+            o_blue    <= accumulator(blocknr,2)(21 downto 14);
          else
             o_red     <= a_red;
             o_green   <= a_green;
@@ -101,6 +103,33 @@ process(clk_pixel)
 				accumulator(0,0) <= (others => '0');
 				accumulator(0,1) <= (others => '0');
 				accumulator(0,2) <= (others => '0');
+				accumulator(1,0) <= (others => '0');
+				accumulator(1,1) <= (others => '0');
+				accumulator(1,2) <= (others => '0');
+				accumulator(2,0) <= (others => '0');
+				accumulator(2,1) <= (others => '0');
+				accumulator(2,2) <= (others => '0');
+				accumulator(3,0) <= (others => '0');
+				accumulator(3,1) <= (others => '0');
+				accumulator(3,2) <= (others => '0');
+				accumulator(4,0) <= (others => '0');
+				accumulator(4,1) <= (others => '0');
+				accumulator(4,2) <= (others => '0');
+				accumulator(5,0) <= (others => '0');
+				accumulator(5,1) <= (others => '0');
+				accumulator(5,2) <= (others => '0');
+				accumulator(6,0) <= (others => '0');
+				accumulator(6,1) <= (others => '0');
+				accumulator(6,2) <= (others => '0');
+				accumulator(7,0) <= (others => '0');
+				accumulator(7,1) <= (others => '0');
+				accumulator(7,2) <= (others => '0');
+				accumulator(8,0) <= (others => '0');
+				accumulator(8,1) <= (others => '0');
+				accumulator(8,2) <= (others => '0');
+				accumulator(9,0) <= (others => '0');
+				accumulator(9,1) <= (others => '0');
+				accumulator(9,2) <= (others => '0');
          end if;
 
          if i_blank = '0' then
