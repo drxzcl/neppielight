@@ -1,0 +1,39 @@
+###########################################
+# miniSpartan6.ucf - 
+#
+# Constraints for dvid_logo project
+#
+###########################################
+VCCAUX = 3.3;
+NET "LEDS<0>" LOC="P11";
+NET "LEDS<1>" LOC="N9";
+NET "LEDS<2>" LOC="M9";
+NET "LEDS<3>" LOC="P9";
+NET "LEDS<4>" LOC="T8";
+NET "LEDS<5>" LOC="N8";
+NET "LEDS<6>" LOC="P8";
+NET "LEDS<7>" LOC="P7";
+#
+#
+# HDMI output
+NET "hdmi_out_p<0>" LOC="C13" | IOSTANDARD="TMDS_33"; # IO_L63P_SCP7_0
+NET "hdmi_out_n<0>" LOC="A13" | IOSTANDARD="TMDS_33"; # IO_L63N_SCP6_0
+NET "hdmi_out_p<1>" LOC="B12" | IOSTANDARD="TMDS_33"; # IO_L62P_0
+NET "hdmi_out_n<1>" LOC="A12" | IOSTANDARD="TMDS_33"; # IO_L62N_VREF_0
+NET "hdmi_out_p<2>" LOC="C11" | IOSTANDARD="TMDS_33"; # IO_L39P_0
+NET "hdmi_out_n<2>" LOC="A11" | IOSTANDARD="TMDS_33"; # IO_L39N_0
+NET "hdmi_out_p<3>" LOC="B14" | IOSTANDARD="TMDS_33"; # IO_L65P_SCP3_0
+NET "hdmi_out_n<3>" LOC="A14" | IOSTANDARD="TMDS_33"; # IO_L65N_SCP2_0
+#
+# 
+# HDMI input
+NET "hdmi_in_p<0>" LOC="C7" | IOSTANDARD="TMDS_33"; # IO_L6P_0
+NET "hdmi_in_n<0>" LOC="A7" | IOSTANDARD="TMDS_33"; # IO_L6N_0
+NET "hdmi_in_p<1>" LOC="B6" | IOSTANDARD="TMDS_33"; # IO_L4P_0
+NET "hdmi_in_n<1>" LOC="A6" | IOSTANDARD="TMDS_33"; # IO_L4N_0
+NET "hdmi_in_p<2>" LOC="B5" | IOSTANDARD="TMDS_33"; # IO_L2P_0
+NET "hdmi_in_n<2>" LOC="A5" | IOSTANDARD="TMDS_33"; # IO_L2N_0
+NET "hdmi_in_p<3>" LOC="C9" | IOSTANDARD="TMDS_33" | PERIOD=12 ns; # IO_L34P_GCLK19_0
+NET "hdmi_in_n<3>" LOC="A9" | IOSTANDARD="TMDS_33"; # IO_L34N_GCLK18_0
+NET "hdmi_in_sclk" LOC="C1" | IOSTANDARD="LVTTL"; # IO_50P_M3WE_3
+NET "hdmi_in_sdat" LOC="B1" | IOSTANDARD="LVTTL"; # IO_50N_M3BA2_3
