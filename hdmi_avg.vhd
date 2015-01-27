@@ -64,7 +64,7 @@ architecture Behavioral of hdmi_avg is
 		);
 	END COMPONENT;
 
-	COMPONENT logo
+	COMPONENT averager
 	PORT(
 		clk_pixel : IN std_logic;
       --
@@ -159,7 +159,7 @@ Inst_dvid_in: dvid_in PORT MAP(
 		vsync     => i_vsync
 	);
 
-	Inst_logo: logo PORT MAP(
+	Inst_averager: averager PORT MAP(
 		clk_pixel => clk_pixel,
 		i_red     => i_red,
       i_green   => i_green,
