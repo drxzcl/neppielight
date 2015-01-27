@@ -21,7 +21,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
-entity dvid_logo is
+entity hdmi_avg is
     Port ( --clk50         : in  STD_LOGIC;
            hdmi_in_p     : in  STD_LOGIC_VECTOR(3 downto 0);
            hdmi_in_n     : in  STD_LOGIC_VECTOR(3 downto 0);
@@ -32,9 +32,9 @@ entity dvid_logo is
            hdmi_out_n : out  STD_LOGIC_VECTOR(3 downto 0);
                       
            leds       : out std_logic_vector(7 downto 0));
-end dvid_logo;
+end hdmi_avg;
 
-architecture Behavioral of dvid_logo is
+architecture Behavioral of hdmi_avg is
 
 	COMPONENT vga_gen
 	PORT(
