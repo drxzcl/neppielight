@@ -32,6 +32,7 @@ entity averager is
 		i_hsync   : IN std_logic;
 		i_vsync   : IN std_logic;          
       --
+		framebuffer : OUT std_logic_vector(0 to 10*24-1);
 		o_red     : OUT std_logic_vector(7 downto 0);
 		o_green   : OUT std_logic_vector(7 downto 0);
 		o_blue    : OUT std_logic_vector(7 downto 0);
@@ -61,11 +62,9 @@ architecture Behavioral of averager is
    -- signal pixel : std_logic_vector(23 downto 0) := (others => '0'); 
    type accumulator_type is array (0 to 9,0 to 3) of std_logic_vector(21 downto 0);
    signal accumulator : accumulator_type; 
-   signal address : unsigned(13 downto 0);
-	signal blocknr : integer;
+	signal blocknr : integer range 0 to 10;
 
 begin
-   address <= unsigned(not y(6 downto 0))&unsigned(x(6 downto 0));
 
 process(clk_pixel)
    begin
@@ -95,41 +94,23 @@ process(clk_pixel)
          a_hsync   <= i_hsync;
          a_vsync   <= i_vsync;
 
-         --pixel <= logo(to_integer(address));
 
          -- Working out where we are in the screen..
          if i_vsync /= a_vsync then
             y <= (others => '0');
-				accumulator(0,0) <= (others => '0');
-				accumulator(0,1) <= (others => '0');
-				accumulator(0,2) <= (others => '0');
-				accumulator(1,0) <= (others => '0');
-				accumulator(1,1) <= (others => '0');
-				accumulator(1,2) <= (others => '0');
-				accumulator(2,0) <= (others => '0');
-				accumulator(2,1) <= (others => '0');
-				accumulator(2,2) <= (others => '0');
-				accumulator(3,0) <= (others => '0');
-				accumulator(3,1) <= (others => '0');
-				accumulator(3,2) <= (others => '0');
-				accumulator(4,0) <= (others => '0');
-				accumulator(4,1) <= (others => '0');
-				accumulator(4,2) <= (others => '0');
-				accumulator(5,0) <= (others => '0');
-				accumulator(5,1) <= (others => '0');
-				accumulator(5,2) <= (others => '0');
-				accumulator(6,0) <= (others => '0');
-				accumulator(6,1) <= (others => '0');
-				accumulator(6,2) <= (others => '0');
-				accumulator(7,0) <= (others => '0');
-				accumulator(7,1) <= (others => '0');
-				accumulator(7,2) <= (others => '0');
-				accumulator(8,0) <= (others => '0');
-				accumulator(8,1) <= (others => '0');
-				accumulator(8,2) <= (others => '0');
-				accumulator(9,0) <= (others => '0');
-				accumulator(9,1) <= (others => '0');
-				accumulator(9,2) <= (others => '0');
+							
+				if i_vsync = '1' then
+					for i in 0 to 9 loop
+						framebuffer(0  + i * 24 to i * 24 + 7)  <= accumulator(i,0)(21 downto 14);
+						framebuffer(8  + i * 24 to i * 24 + 15) <= accumulator(i,1)(21 downto 14);
+						framebuffer(16 + i * 24 to i * 24 + 23) <= accumulator(i,2)(21 downto 14);
+						accumulator(i,0) <= (others => '0');
+						accumulator(i,1) <= (others => '0');
+						accumulator(i,2) <= (others => '0');
+					end loop;
+				end if;
+
+						
          end if;
 
          if i_blank = '0' then

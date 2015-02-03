@@ -22,7 +22,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity hdmi_avg is
-    Port ( --clk50         : in  STD_LOGIC;
+    Port ( clk50         : in  STD_LOGIC;
            hdmi_in_p     : in  STD_LOGIC_VECTOR(3 downto 0);
            hdmi_in_n     : in  STD_LOGIC_VECTOR(3 downto 0);
            hdmi_in_sclk  : inout  STD_LOGIC;
@@ -31,7 +31,9 @@ entity hdmi_avg is
            hdmi_out_p : out  STD_LOGIC_VECTOR(3 downto 0);
            hdmi_out_n : out  STD_LOGIC_VECTOR(3 downto 0);
                       
-           leds       : out std_logic_vector(7 downto 0));
+           leds       : out std_logic_vector(7 downto 0);
+			  spiout_mosi: out std_logic;
+			  spiout_sck: out std_logic);
 end hdmi_avg;
 
 architecture Behavioral of hdmi_avg is
@@ -75,6 +77,7 @@ architecture Behavioral of hdmi_avg is
 		i_hsync   : IN std_logic;
 		i_vsync   : IN std_logic;          
       --
+		framebuffer: OUT std_logic_vector(0 to 24*10-1 );
 		o_red     : OUT std_logic_vector(7 downto 0);
 		o_green   : OUT std_logic_vector(7 downto 0);
 		o_blue    : OUT std_logic_vector(7 downto 0);
@@ -101,6 +104,15 @@ architecture Behavioral of hdmi_avg is
 	END COMPONENT;
 
 
+	COMPONENT spiout
+	PORT(
+		     clk50 : in  STD_LOGIC;
+           data : in  STD_LOGIC_VECTOR (10*24-1 downto 0);
+           MOSI : out  STD_LOGIC;
+           SCK : out  STD_LOGIC
+		);
+	END COMPONENT;
+
 	signal clk_pixel : std_logic;
 
    
@@ -117,6 +129,8 @@ architecture Behavioral of hdmi_avg is
 	signal o_blank   : std_logic;
 	signal o_hsync   : std_logic;
 	signal o_vsync   : std_logic;          
+
+	signal framebuffer : std_logic_vector(0 to 10*24-1) := (others => '0');
    
 begin
    hdmi_in_sclk  <= 'Z';
@@ -168,6 +182,7 @@ Inst_dvid_in: dvid_in PORT MAP(
 		i_hsync   => i_hsync,
 		i_vsync   => i_vsync,
       --
+		framebuffer => framebuffer,
 		o_red     => o_red,
       o_green   => o_green,
       o_blue    => o_blue,
@@ -191,6 +206,13 @@ Inst_dvid_out: dvid_out PORT MAP(
      
 		tmds_out_p => hdmi_out_p,
 		tmds_out_n => hdmi_out_n
+	);
+	
+	Inst_spout: spiout PORT MAP(
+		clk50 => clk50,
+		data => framebuffer,
+      MOSI => SPIOUT_MOSI,
+      SCK => SPIOUT_SCK
 	);
 
 
