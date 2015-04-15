@@ -40,7 +40,7 @@ entity spiout is
 end spiout;
 
 architecture Behavioral of spiout is
-signal sck_counter    : std_logic_vector(9 downto 0);
+signal sck_counter    : std_logic_vector(15 downto 0);
 signal sck_s : std_logic;
 signal sck_enable : std_logic := '1';
 --signal data_reg    : std_logic_vector(7 downto 0) := "11110010";
@@ -52,7 +52,7 @@ process(clk50,sck_counter,sck_enable)
 		if (rising_edge(clk50)) then
 			sck_counter <= sck_counter + 1;
 		end if;
- 	   sck_s <= sck_counter(8);
+ 	   sck_s <= sck_counter(13);
 	end process;
 		
 process(sck_s, sck_enable)
