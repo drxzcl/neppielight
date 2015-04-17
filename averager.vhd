@@ -32,7 +32,7 @@ entity averager is
 		i_hsync   : IN std_logic;
 		i_vsync   : IN std_logic;          
       --
-		framebuffer : OUT std_logic_vector(0 to 10*24-1);
+		framebuffer : OUT std_logic_vector(0 to 25*24-1);
 		o_red     : OUT std_logic_vector(7 downto 0);
 		o_green   : OUT std_logic_vector(7 downto 0);
 		o_blue    : OUT std_logic_vector(7 downto 0);
@@ -59,7 +59,7 @@ architecture Behavioral of averager is
    signal x : STD_LOGIC_VECTOR (10 downto 0);
    signal y : STD_LOGIC_VECTOR (10 downto 0);
 
-	constant nblocks : integer := 10;	
+	constant nblocks : integer := 25;	
 
    -- signal pixel : std_logic_vector(23 downto 0) := (others => '0'); 
    type accumulator_type is array (0 to nblocks-1,0 to 3) of std_logic_vector(21 downto 0);
@@ -67,8 +67,11 @@ architecture Behavioral of averager is
 	--signal blocknr : integer range 0 to 10;
 	
 	type blockcoords_type is array (0 to nblocks-1) of integer;
-	constant startx : blockcoords_type := (0,128,256,384,512,640,768,896,1024,1152);
-	constant starty : blockcoords_type := (0,0,0,0,0,0,0,0,0,0);		
+	-- Due to the details of the construction, we start in the lower left corner
+	-- and work our way clockwise.
+	--
+	constant startx : blockcoords_type := (0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+	constant starty : blockcoords_type := (720-128,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);		
 	
 	type gamma_lut_type is array ( 0 to 255) of std_logic_vector(7 downto 0);
 	constant gamma_lut : gamma_lut_type := (

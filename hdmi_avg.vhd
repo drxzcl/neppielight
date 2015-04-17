@@ -77,7 +77,7 @@ architecture Behavioral of hdmi_avg is
 		i_hsync   : IN std_logic;
 		i_vsync   : IN std_logic;          
       --
-		framebuffer: OUT std_logic_vector(0 to 24*10-1 );
+		framebuffer: OUT std_logic_vector(0 to 24*25-1 );
 		o_red     : OUT std_logic_vector(7 downto 0);
 		o_green   : OUT std_logic_vector(7 downto 0);
 		o_blue    : OUT std_logic_vector(7 downto 0);
@@ -107,7 +107,7 @@ architecture Behavioral of hdmi_avg is
 	COMPONENT spiout
 	PORT(
 		     clk50 : in  STD_LOGIC;
-           data : in  STD_LOGIC_VECTOR (10*24-1 downto 0);
+           data : in  STD_LOGIC_VECTOR (25*24-1 downto 0);
            MOSI : out  STD_LOGIC;
            SCK : out  STD_LOGIC
 		);
@@ -130,7 +130,7 @@ architecture Behavioral of hdmi_avg is
 	signal o_hsync   : std_logic;
 	signal o_vsync   : std_logic;          
 
-	signal framebuffer : std_logic_vector(0 to 10*24-1) := (others => '0');
+	signal framebuffer : std_logic_vector(0 to 25*24-1) := (others => '0');
    
 begin
    hdmi_in_sclk  <= 'Z';
