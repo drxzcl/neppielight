@@ -59,12 +59,14 @@ architecture Behavioral of averager is
    signal x : STD_LOGIC_VECTOR (10 downto 0);
    signal y : STD_LOGIC_VECTOR (10 downto 0);
 
+	constant nblocks : integer := 10;	
+
    -- signal pixel : std_logic_vector(23 downto 0) := (others => '0'); 
-   type accumulator_type is array (0 to 9,0 to 3) of std_logic_vector(21 downto 0);
+   type accumulator_type is array (0 to nblocks-1,0 to 3) of std_logic_vector(21 downto 0);
    signal accumulator : accumulator_type; 
 	--signal blocknr : integer range 0 to 10;
 	
-	type blockcoords_type is array (0 to 9) of integer;
+	type blockcoords_type is array (0 to nblocks-1) of integer;
 	constant startx : blockcoords_type := (0,128,256,384,512,640,768,896,1024,1152);
 	constant starty : blockcoords_type := (0,0,0,0,0,0,0,0,0,0);		
 	
@@ -97,7 +99,7 @@ process(clk_pixel)
    begin
       if rising_edge(clk_pixel) then
 				   					
-			for bn in 0 to 9 loop
+			for bn in 0 to nblocks-1 loop
 				if unsigned(x) >= startx(bn) and unsigned(x) < startx(bn)+128 and
 						unsigned(y) >= starty(bn) and unsigned(y) < starty(bn)+128 then
 					-- We are a part of block bn. Accumulate the color info.
@@ -110,7 +112,7 @@ process(clk_pixel)
 
 			-- debug, mark the block corners in red
 			blockedge := '0';
-			for bn in 0 to 9 loop
+			for bn in 0 to nblocks-1 loop
 				if (unsigned(x) = startx(bn) or unsigned(x) = startx(bn)+128) and
 						(unsigned(y) = starty(bn) or unsigned(y) = starty(bn)+128) then
 					blockedge := '1';
@@ -144,11 +146,8 @@ process(clk_pixel)
             y <= (others => '0');
 							
 				if i_vsync = '1' then
-					for i in 0 to 9 loop
+					for i in 0 to nblocks-1 loop
 						for c in 0 to 2 loop
-							--framebuffer(c * 8 + i * 24 to i * 24 + c * 8 + 7)  <= accumulator(i,c)(21 downto 14);
-							
-							-- with accumulator(i,c)(21 downto 14) select framebuffer(c * 8 + i * 24 to i * 24 + c * 8 + 7) <=
 							framebuffer(c * 8 + i * 24 to i * 24 + c * 8 + 7) <= gamma_lut(to_integer(unsigned(accumulator(i,c)(21 downto 14))));
 							accumulator(i,c) <= (others => '0');
 						end loop;
