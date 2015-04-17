@@ -52,7 +52,7 @@ process(clk50,sck_counter,sck_enable)
 		if (rising_edge(clk50)) then
 			sck_counter <= sck_counter + 1;
 		end if;
- 	   sck_s <= sck_counter(13);
+ 	   sck_s <= sck_counter(11);
 	end process;
 		
 process(sck_s, sck_enable)
