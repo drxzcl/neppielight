@@ -62,7 +62,7 @@ architecture Behavioral of averager is
    -- signal pixel : std_logic_vector(23 downto 0) := (others => '0'); 
    type accumulator_type is array (0 to 9,0 to 3) of std_logic_vector(21 downto 0);
    signal accumulator : accumulator_type; 
-	signal blocknr : integer range 0 to 10;
+	--signal blocknr : integer range 0 to 10;
 	
 	type blockcoords_type is array (0 to 9) of integer;
 	constant startx : blockcoords_type := (0,128,256,384,512,640,768,896,1024,1152);
@@ -93,27 +93,40 @@ architecture Behavioral of averager is
 begin
 
 process(clk_pixel)
+	variable blockedge : std_logic := '0';
    begin
       if rising_edge(clk_pixel) then
-		
+				   					
 			for bn in 0 to 9 loop
 				if unsigned(x) >= startx(bn) and unsigned(x) < startx(bn)+128 and
 						unsigned(y) >= starty(bn) and unsigned(y) < starty(bn)+128 then
-					-- We are a part of block bn
+					-- We are a part of block bn. Accumulate the color info.
 					accumulator(bn,0) <= std_logic_vector(unsigned(accumulator(bn,0)) + unsigned(a_red));
 					accumulator(bn,1) <= std_logic_vector(unsigned(accumulator(bn,1)) + unsigned(a_green));
 					accumulator(bn,2) <= std_logic_vector(unsigned(accumulator(bn,2)) + unsigned(a_blue));
-					o_red     <= accumulator(bn,0)(21 downto 14);
-					o_green   <= accumulator(bn,1)(21 downto 14);
-					o_blue    <= accumulator(bn,2)(21 downto 14);													
 				end if;
 			end loop;
 		
-         
-			o_red     <= a_red;
-			o_green   <= a_green;
-			o_blue    <= a_blue;
 
+			-- debug, mark the block corners in red
+			blockedge := '0';
+			for bn in 0 to 9 loop
+				if (unsigned(x) = startx(bn) or unsigned(x) = startx(bn)+128) and
+						(unsigned(y) = starty(bn) or unsigned(y) = starty(bn)+128) then
+					blockedge := '1';
+				end if;
+			end loop;
+         
+			if blockedge = '0' then
+				o_red     <= a_red;
+				o_green   <= a_green;
+				o_blue    <= a_blue;
+			else
+				o_red     <= X"FF";
+				o_green   <= X"00";
+				o_blue    <= X"00";
+			end if;
+			
          o_blank   <= a_blank;
          o_hsync   <= a_hsync;
          o_vsync   <= a_vsync;
