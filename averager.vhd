@@ -69,9 +69,9 @@ architecture Behavioral of averager is
 	type blockcoords_type is array (0 to nblocks-1) of integer;
 	-- Due to the details of the construction, we start in the lower left corner
 	-- and work our way clockwise.
-	--
-	constant startx : blockcoords_type := (0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
-	constant starty : blockcoords_type := (720-128,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);		
+	-- Laterally, we've got more leds than pixels, so we'll have partially verlapping boxes.
+	constant startx : blockcoords_type := (  0,  0,  0,  0,  0,0,144,288,432,576,720,864,1008,1152,1152,1152,1152,1152,1152,987,823,658,494,329,164);
+	constant starty : blockcoords_type := (592,472,356,238,118,0,  0,  0,  0,  0,  0,  0,   0,   0, 118, 238, 356, 472, 592,592,592,592,592,592,592);		
 	
 	type gamma_lut_type is array ( 0 to 255) of std_logic_vector(7 downto 0);
 	constant gamma_lut : gamma_lut_type := (
