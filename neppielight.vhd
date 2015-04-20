@@ -1,27 +1,8 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date:    15:13:30 01/03/2015 
--- Design Name: 
--- Module Name:    dvid_thru - Behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
---
--- Dependencies: 
---
--- Revision: 
--- Revision 0.01 - File Created
--- Additional Comments: 
---
-----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
-entity hdmi_avg is
+entity neppielight is
     Port ( clk50         : in  STD_LOGIC;
            hdmi_in_p     : in  STD_LOGIC_VECTOR(3 downto 0);
            hdmi_in_n     : in  STD_LOGIC_VECTOR(3 downto 0);
@@ -34,9 +15,9 @@ entity hdmi_avg is
            leds       : out std_logic_vector(7 downto 0);
 			  spiout_mosi: out std_logic;
 			  spiout_sck: out std_logic);
-end hdmi_avg;
+end neppielight;
 
-architecture Behavioral of hdmi_avg is
+architecture Behavioral of neppielight is
 
 	COMPONENT vga_gen
 	PORT(
@@ -135,30 +116,8 @@ architecture Behavioral of hdmi_avg is
 begin
    hdmi_in_sclk  <= 'Z';
    hdmi_in_sdat  <= 'Z';
-   ----------------------------------
-   -- EDID I2C signals (not implemented)
-   ----------------------------------
---   hdmi_in_sclk  <= 'Z';
---   hdmi_in_sdat  <= 'Z';
 
----------------------------------------
--- Generate a 1280x720 VGA test pattern
----------------------------------------
---Inst_vga_gen: vga_gen PORT MAP(
---		clk50 => clk50,
---		pixel_clock     => pixel_clock,      
---		red_p           => red_p,
---		green_p         => green_p,
---		blue_p          => blue_p,
---		blank           => blank,
---		hsync           => hsync,
---		vsync           => vsync
---	);
-
----------------------------------------
--- Generate a 1280x720 VGA test pattern
----------------------------------------
-Inst_dvid_in: dvid_in PORT MAP(
+	Inst_dvid_in: dvid_in PORT MAP(
 		tmds_in_p => hdmi_in_p,
 		tmds_in_n => hdmi_in_n,
 
@@ -191,9 +150,6 @@ Inst_dvid_in: dvid_in PORT MAP(
 		o_vsync   => o_vsync
 	);
    
----------------------------------------------------
--- Convert the VGA signals to the DVI-D/TMDS output 
----------------------------------------------------
 Inst_dvid_out: dvid_out PORT MAP(
 		clk_pixel  => clk_pixel,
      
