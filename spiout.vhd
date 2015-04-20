@@ -1,19 +1,10 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Engineer: drxzclx@gmail.com
 -- 
 -- Create Date:    21:43:14 02/02/2015 
--- Design Name: 
+-- Design Name:    SPI driver for WS2801 led strings
 -- Module Name:    spiout - Behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
---
--- Dependencies: 
---
--- Revision: 
--- Revision 0.01 - File Created
+-- Project Name: 	 Neppielight
 -- Additional Comments: 
 --
 ----------------------------------------------------------------------------------
@@ -43,7 +34,6 @@ architecture Behavioral of spiout is
 signal sck_counter    : std_logic_vector(15 downto 0);
 signal sck_s : std_logic;
 signal sck_enable : std_logic := '1';
---signal data_reg    : std_logic_vector(7 downto 0) := "11110010";
 signal wrcnt: std_logic_vector(9 downto 0) := (others => '0');
 
 begin
