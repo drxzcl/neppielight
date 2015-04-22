@@ -103,23 +103,23 @@ process(clk_pixel)
 		
 
 			-- debug, mark the block corners in red
-			blockedge := '0';
-			for bn in 0 to nblocks-1 loop
-				if (unsigned(x) = startx(bn) or unsigned(x) = startx(bn)+128) and
-						(unsigned(y) = starty(bn) or unsigned(y) = starty(bn)+128) then
-					blockedge := '1';
-				end if;
-			end loop;
-         
-			if blockedge = '0' then
+--			blockedge := '0';
+--			for bn in 0 to nblocks-1 loop
+--				if (unsigned(x) = startx(bn) or unsigned(x) = startx(bn)+128) and
+--						(unsigned(y) = starty(bn) or unsigned(y) = starty(bn)+128) then
+--					blockedge := '1';
+--				end if;
+--			end loop;
+--         
+--			if blockedge = '0' then
 				o_red     <= a_red;
 				o_green   <= a_green;
 				o_blue    <= a_blue;
-			else
-				o_red     <= X"FF";
-				o_green   <= X"00";
-				o_blue    <= X"00";
-			end if;
+--			else
+--				o_red     <= X"FF";
+--				o_green   <= X"00";
+--				o_blue    <= X"00";
+--			end if;
 			
          o_blank   <= a_blank;
          o_hsync   <= a_hsync;
