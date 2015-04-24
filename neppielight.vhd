@@ -19,20 +19,7 @@ end neppielight;
 
 architecture Behavioral of neppielight is
 
-	COMPONENT vga_gen
-	PORT(
-		clk50           : IN std_logic;          
-		pixel_clock     : OUT std_logic;
-		red_p           : OUT std_logic_vector(7 downto 0);
-		green_p         : OUT std_logic_vector(7 downto 0);
-		blue_p          : OUT std_logic_vector(7 downto 0);
-		blank           : OUT std_logic;
-		hsync           : OUT std_logic;
-		vsync           : OUT std_logic
-		);
-	END COMPONENT;
-
-
+	
 	COMPONENT dvid_out
 	PORT(
       clk_pixel  : IN std_logic;
