@@ -19,20 +19,6 @@ end neppielight;
 
 architecture Behavioral of neppielight is
 
-	
-	COMPONENT dvid_out
-	PORT(
-      clk_pixel  : IN std_logic;
-		red_p      : IN std_logic_vector(7 downto 0);
-		green_p    : IN std_logic_vector(7 downto 0);
-		blue_p     : IN std_logic_vector(7 downto 0);
-		blank      : IN std_logic;
-		hsync      : IN std_logic;
-		vsync      : IN std_logic;          
-		tmds_out_p : OUT std_logic_vector(3 downto 0);
-		tmds_out_n : OUT std_logic_vector(3 downto 0)
-		);
-	END COMPONENT;
 
 	COMPONENT averager
 	PORT(
@@ -56,7 +42,7 @@ architecture Behavioral of neppielight is
 	END COMPONENT;
 
 
-	COMPONENT dvid_in
+	COMPONENT dvid_tap
 	PORT(
       clk_pixel  : out std_logic;
       leds     : out std_logic_vector(7 downto 0) := (others => '0');
@@ -67,7 +53,9 @@ architecture Behavioral of neppielight is
 		hsync      : out std_logic;
 		vsync      : out std_logic;          
 		tmds_in_p  : in  std_logic_vector(3 downto 0);
-		tmds_in_n  : in  std_logic_vector(3 downto 0)
+		tmds_in_n  : in  std_logic_vector(3 downto 0);
+		tmds_out_p  : out  std_logic_vector(3 downto 0);
+		tmds_out_n  : out  std_logic_vector(3 downto 0)
 		);
 	END COMPONENT;
 
@@ -104,9 +92,11 @@ begin
    hdmi_in_sclk  <= 'Z';
    hdmi_in_sdat  <= 'Z';
 
-	Inst_dvid_in: dvid_in PORT MAP(
+	Inst_dvid_tap: dvid_tap PORT MAP(
 		tmds_in_p => hdmi_in_p,
 		tmds_in_n => hdmi_in_n,
+		tmds_out_p => hdmi_out_p,
+		tmds_out_n => hdmi_out_n,
 
       leds => leds,
       
@@ -137,19 +127,6 @@ begin
 		o_vsync   => o_vsync
 	);
    
-Inst_dvid_out: dvid_out PORT MAP(
-		clk_pixel  => clk_pixel,
-     
-		red_p      => o_red,
-		green_p    => o_green,
-		blue_p     => o_blue,
-		blank      => o_blank,
-		hsync      => o_hsync,
-		vsync      => o_vsync,
-     
-		tmds_out_p => hdmi_out_p,
-		tmds_out_n => hdmi_out_n
-	);
 	
 	Inst_spout: spiout PORT MAP(
 		clk50 => clk50,
